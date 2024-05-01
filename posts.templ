@@ -1,0 +1,68 @@
+package main
+
+import "fmt"
+import "time"
+
+templ searchResultTemplate(value string) {
+	<div id="searchResultTemplate">
+		{ value }
+		lorem ipsum
+		lorem ipsum
+		lorem ipsum
+		lorem ipsum
+		lorem ipsum
+		lorem ipsum
+		lorem ipsum
+	</div>
+}
+
+templ headerTemplate(name string) {
+	<header data-testid="headerTemplate">
+		<h1>{ name }</h1>
+		@navTemplate()
+		@inputTemplate()
+	</header>
+}
+
+templ inputTemplate() {
+	<form hx-post="/clicked" hx-target="#test" hx-swap="beforeend">
+		<input type="text" name="search" placeholder="Search"/>
+	</form>
+}
+
+templ footerTemplate() {
+	<footer data-testid="footerTemplate">
+		<div>&copy; { fmt.Sprintf("%d", time.Now().Year()) }</div>
+	</footer>
+}
+
+templ navTemplate() {
+	<nav data-testid="navTemplate">
+		<ul>
+			<li><a href="/">Home</a></li>
+		</ul>
+	</nav>
+}
+
+templ layout(name string) {
+	<html>
+		<head>
+			<title>{ name }</title>
+			<script src="https://unpkg.com/htmx.org@1.9.12"></script>
+		</head>
+		<body>
+			@headerTemplate(name)
+			<main>
+				{ children... }
+				<div id="test"></div>
+			</main>
+		</body>
+		@footerTemplate()
+	</html>
+}
+
+templ home() {
+	@layout("Home") {
+		<div data-testid="homeTemplate">Welcome to my website.</div>
+	}
+}
