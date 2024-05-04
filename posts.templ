@@ -1,25 +1,41 @@
 package main
 
-import "fmt"
-import "time"
-
-templ searchResultTemplate(value string) {
-	<div id="searchResultTemplate">
-		{ value }
-		lorem ipsum
-		lorem ipsum
-		lorem ipsum
-		lorem ipsum
-		lorem ipsum
-		lorem ipsum
-		lorem ipsum
+// import "fmt"
+// import "time"
+templ movieThumbnail() {
+	<div class="flex flex-col">
+		<img src="" alt="obrazek"/>
+		<div>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde impedit, laboriosam
+			eum quisquam eveniet odit amet placeat iste ea perferendis sunt nostrum, voluptatum
+			at quam excepturi quae rerum magni nobis?
+		</div>
 	</div>
 }
 
-templ headerTemplate(name string) {
+templ bookmarksTemplate() {
+	@layout() {
+		<div>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde impedit, laboriosam
+			eum quisquam eveniet odit amet placeat iste ea perferendis sunt nostrum, voluptatum
+			at quam excepturi quae rerum magni nobis?
+		</div>
+	}
+}
+
+templ searchTabTemplate() {
+	@layout() {
+		<div id="searchResultTemplate">
+			<ul>
+				@movieThumbnail()
+			</ul>
+		</div>
+	}
+}
+
+templ headerTemplate() {
 	<header data-testid="headerTemplate">
-		<h1>{ name }</h1>
-		@navTemplate()
+		<h1></h1>
 		@inputTemplate()
 	</header>
 }
@@ -32,7 +48,8 @@ templ inputTemplate() {
 
 templ footerTemplate() {
 	<footer data-testid="footerTemplate">
-		<div>&copy; { fmt.Sprintf("%d", time.Now().Year()) }</div>
+		// <div>&copy; { fmt.Sprintf("%d", time.Now().Year()) }</div>
+		@navTemplate()
 	</footer>
 }
 
@@ -40,21 +57,23 @@ templ navTemplate() {
 	<nav data-testid="navTemplate">
 		<ul>
 			<li><a href="/">Home</a></li>
+			<li><a href="/searchTab">Search</a></li>
+			<li><a href="/bookmarksTab">Watchlist</a></li>
 		</ul>
 	</nav>
 }
 
-templ layout(name string) {
+templ layout() {
 	<html>
 		<head>
-			<title>{ name }</title>
+			<title></title>
 			<script src="https://unpkg.com/htmx.org@1.9.12"></script>
+			<link href="output.css" rel="stylesheet"/>
 		</head>
 		<body>
-			@headerTemplate(name)
+			@headerTemplate()
 			<main>
 				{ children... }
-				<div id="test"></div>
 			</main>
 		</body>
 		@footerTemplate()
@@ -62,7 +81,7 @@ templ layout(name string) {
 }
 
 templ home() {
-	@layout("Home") {
-		<div data-testid="homeTemplate">Welcome to my website.</div>
+	@layout() {
+		<div class>Welcome to my website.</div>
 	}
 }

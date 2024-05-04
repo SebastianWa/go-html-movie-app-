@@ -1,8 +1,14 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require("tailwindcss/colors");
+
 module.exports = {
       content: ["*.templ"],
       theme: {
-            extend: {},
+            // colors: {
+            //       transparent: "transparent",
+            //       current: "currentColor",
+            //       indigo: colors.indigo,
+            // },
       },
       plugins: [],
 };
