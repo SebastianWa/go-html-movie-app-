@@ -2,86 +2,84 @@ package main
 
 // import "fmt"
 // import "time"
-templ movieThumbnail() {
-	<div class="flex flex-col">
-		<img src="" alt="obrazek"/>
-		<div>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde impedit, laboriosam
-			eum quisquam eveniet odit amet placeat iste ea perferendis sunt nostrum, voluptatum
-			at quam excepturi quae rerum magni nobis?
+
+// templ bookmarksTemplate() {
+// 	@layout() {
+// 		<div>
+// 			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde impedit, laboriosam
+// 			eum quisquam eveniet odit amet placeat iste ea perferendis sunt nostrum, voluptatum
+// 			at quam excepturi quae rerum magni nobis?
+// 		</div>
+// 	}
+// }
+templ movieThumbnail(movie Movie) {
+	<li class="thumbnail">
+		<img class="thumbnail__img" src="/static/img/default-movie.jpg" alt="obrazek"/>
+		<div class="thumbnail__content">
+			<h2>{ movie.title }</h2>
+			<p>{ movie.release_date }</p>
+			<p>{ movie.vote_average }</p>
 		</div>
+	</li>
+}
+
+templ searchTabTemplate(movies []Movie) {
+	<div>
+		<ul class="movies-thumbnails" id="searchResultTemplate">
+			for _, movie := range movies {
+				@movieThumbnail(movie)
+			}
+		</ul>
 	</div>
 }
 
-templ bookmarksTemplate() {
-	@layout() {
-		<div>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde impedit, laboriosam
-			eum quisquam eveniet odit amet placeat iste ea perferendis sunt nostrum, voluptatum
-			at quam excepturi quae rerum magni nobis?
-		</div>
-	}
-}
+// templ headerTemplate() {
+// <header data-testid="headerTemplate">
+// 	<h1></h1>
+// 	@inputTemplate()
+// </header>
+// }
 
-templ searchTabTemplate() {
-	@layout() {
-		<div id="searchResultTemplate">
-			<ul>
-				@movieThumbnail()
-			</ul>
-		</div>
-	}
-}
+// templ inputTemplate() {
+// 	<form hx-post="/search" hx-target="#main" hx-swap="innerHTML">
+// 		<input type="text" name="search" placeholder="Search"/>
+// 	</form>
+// }
 
-templ headerTemplate() {
-	<header data-testid="headerTemplate">
-		<h1></h1>
-		@inputTemplate()
-	</header>
-}
-
-templ inputTemplate() {
-	<form hx-post="/clicked" hx-target="#test" hx-swap="beforeend">
-		<input type="text" name="search" placeholder="Search"/>
-	</form>
-}
-
-templ footerTemplate() {
-	<footer data-testid="footerTemplate">
-		// <div>&copy; { fmt.Sprintf("%d", time.Now().Year()) }</div>
-		@navTemplate()
-	</footer>
-}
-
-templ navTemplate() {
-	<nav data-testid="navTemplate">
-		<ul>
-			<li><a href="/">Home</a></li>
-			<li><a href="/searchTab">Search</a></li>
-			<li><a href="/bookmarksTab">Watchlist</a></li>
-		</ul>
-	</nav>
-}
-
-templ layout() {
+// templ footerTemplate() {
+// 	<footer data-testid="footerTemplate">
+// 		@navTemplate()
+// 	</footer>
+// }
+templ Home() {
 	<html>
 		<head>
-			<title></title>
+			<title>test</title>
 			<script src="https://unpkg.com/htmx.org@1.9.12"></script>
-			<link href="output.css" rel="stylesheet"/>
+			<link href="/static/css/output.css" rel="stylesheet"/>
 		</head>
 		<body>
-			@headerTemplate()
-			<main>
+			<header class="header" data-testid="headerTemplate">
+				<h1 class="header__title">Name of the Page</h1>
+				<form class="search" hx-post="/search" hx-target="#main" hx-swap="innerHTML">
+					<input class="search__input" type="text" name="search" placeholder="Search"/>
+				</form>
+				<nav class="nav" data-testid="navTemplate">
+					<ul class="nav__list">
+						<li><a href="/">Home</a></li>
+						<li><a href="/searchTab">Search</a></li>
+						<li><a href="/bookmarksTab">Watchlist</a></li>
+					</ul>
+				</nav>
+			</header>
+			<main id="main">
 				{ children... }
 			</main>
 		</body>
-		@footerTemplate()
+		<footer data-testid="footerTemplate">
+			<p>
+				Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero soluta labore quas quaerat ipsa adipisci ducimus dolores architecto? Omnis, consectetur ea vitae blanditiis voluptatum repudiandae libero optio iste delectus dolores!
+			</p>
+		</footer>
 	</html>
-}
-
-templ home() {
-	@layout() {
-		<div class>Welcome to my website.</div>
-	}
 }

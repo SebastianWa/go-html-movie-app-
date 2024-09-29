@@ -24,3 +24,5 @@ pnpm-lock.yaml
 trash.*
 
 data
+
+csv.txt

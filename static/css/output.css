@@ -554,10 +554,45 @@ video {
   --tw-contain-style:  ;
 }
 
-.flex {
-  display: flex;
+body {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 30px;
 }
 
-.flex-col {
-  flex-direction: column;
+main {
+  height: 80vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav {
+  display: flex;
+  gap: 10px;
+}
+
+.nav ul {
+  display: contents;
+}
+
+.search {
+  display: contents;
+}
+
+.search__input {
+  flex-grow: 1;
+  margin-inline: 45px;
+}
+
+.movies-thumbnails {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.thumbnail {
+  display: flex;
 }
