@@ -13,9 +13,9 @@ templ favorites(movies []Movie) {
 }
 
 templ movieThumbnail(movie Movie) {
-	<li id={ fmt.Sprintf("movieThumbnail-%d", movie.id) } class="thumbnail">
-		<img class="thumbnail__img" src="/static/img/default-movie.jpg" alt="obrazek"/>
-		<div class="thumbnail__content">
+	<li hx-trigger="click" id={ fmt.Sprintf("movieThumbnail-%d", movie.id) } class="flex gap-3 h-40">
+		<img class="max-w-1/2" src="/static/img/default-movie.jpg" alt="obrazek"/>
+		<div class="flex flex-col">
 			<h2>{ movie.title }</h2>
 			<p>{ movie.release_date }</p>
 			<p>{ movie.vote_average }</p>
@@ -32,13 +32,6 @@ templ movieThumbnail(movie Movie) {
 			}
 		</div>
 	</li>
-}
-
-func sendID(id int) string {
-    return fmt.Sprintf(`{'thumbnailId': '%s'}`, id) 
-}
-func sendIDGET(id int) string {
-    return fmt.Sprintf(`/saved?id='%s'}`, id) 
 }
 
 templ searchTabTemplate(movies []Movie) {
@@ -58,21 +51,21 @@ templ Home() {
 			<script src="https://unpkg.com/htmx.org@1.9.12"></script>
 			<link href="/static/css/output.css" rel="stylesheet"/>
 		</head>
-		<body>
-			<header class="header">
+		<body class="p-10 m-0 mx-auto max-xl">
+			<header class="flex justify-between">
 				<h1 class="header__title">Name of the Page</h1>
-				<form class="search" hx-post="/search" hx-target="#main" hx-swap="innerHTML">
-					<input class="search__input" type="text" name="search" placeholder="Search"/>
+				<form class="contents" hx-post="/search" hx-target="#main" hx-swap="innerHTML">
+					<input class="flex-grow mx-8" type="text" name="search" placeholder="Search"/>
 				</form>
-				<nav class="nav" data-testid="navTemplate">
-					<ul class="nav__list">
+				<nav class="flex gap-3" data-testid="navTemplate">
+					<ul class="contents">
 						<li><a href="/">Home</a></li>
 						<li><a href="/searchTab">Search</a></li>
 						<li><a hx-get="/favorites" hx-target="#main" hx-swap="innerHTML">Favorites</a></li>
 					</ul>
 				</nav>
 			</header>
-			<main id="main">
+			<main class="p-8 min-h-screen" id="main">
 				{ children... }
 			</main>
 		</body>

@@ -59,20 +59,20 @@ func movieThumbnail(movie Movie) templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li id=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li hx-trigger=\"click\" id=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("movieThumbnail-%d", movie.id))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `posts.templ`, Line: 16, Col: 52}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `posts.templ`, Line: 16, Col: 71}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"thumbnail\"><img class=\"thumbnail__img\" src=\"/static/img/default-movie.jpg\" alt=\"obrazek\"><div class=\"thumbnail__content\"><h2>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"flex gap-3 h-40\"><img class=\"max-w-1/2\" src=\"/static/img/default-movie.jpg\" alt=\"obrazek\"><div class=\"flex flex-col\"><h2>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -189,13 +189,6 @@ func movieThumbnail(movie Movie) templ.Component {
 	})
 }
 
-func sendID(id int) string {
-	return fmt.Sprintf(`{'thumbnailId': '%s'}`, id)
-}
-func sendIDGET(id int) string {
-	return fmt.Sprintf(`/saved?id='%s'}`, id)
-}
-
 func searchTabTemplate(movies []Movie) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
@@ -243,7 +236,7 @@ func Home() templ.Component {
 			templ_7745c5c3_Var12 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html><head><title>test</title><script src=\"https://unpkg.com/htmx.org@1.9.12\"></script><link href=\"/static/css/output.css\" rel=\"stylesheet\"></head><body><header class=\"header\"><h1 class=\"header__title\">Name of the Page</h1><form class=\"search\" hx-post=\"/search\" hx-target=\"#main\" hx-swap=\"innerHTML\"><input class=\"search__input\" type=\"text\" name=\"search\" placeholder=\"Search\"></form><nav class=\"nav\" data-testid=\"navTemplate\"><ul class=\"nav__list\"><li><a href=\"/\">Home</a></li><li><a href=\"/searchTab\">Search</a></li><li><a hx-get=\"/favorites\" hx-target=\"#main\" hx-swap=\"innerHTML\">Favorites</a></li></ul></nav></header><main id=\"main\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html><head><title>test</title><script src=\"https://unpkg.com/htmx.org@1.9.12\"></script><link href=\"/static/css/output.css\" rel=\"stylesheet\"></head><body class=\"p-10 m-0 mx-auto max-xl\"><header class=\"flex justify-between\"><h1 class=\"header__title\">Name of the Page</h1><form class=\"contents\" hx-post=\"/search\" hx-target=\"#main\" hx-swap=\"innerHTML\"><input class=\"flex-grow mx-8\" type=\"text\" name=\"search\" placeholder=\"Search\"></form><nav class=\"flex gap-3\" data-testid=\"navTemplate\"><ul class=\"contents\"><li><a href=\"/\">Home</a></li><li><a href=\"/searchTab\">Search</a></li><li><a hx-get=\"/favorites\" hx-target=\"#main\" hx-swap=\"innerHTML\">Favorites</a></li></ul></nav></header><main class=\"p-8 min-h-screen\" id=\"main\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
