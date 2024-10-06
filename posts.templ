@@ -1,6 +1,6 @@
 package main
 
-// import "fmt"
+import "fmt"
 // import "time"
 
 // templ bookmarksTemplate() {
@@ -13,14 +13,32 @@ package main
 // 	}
 // }
 templ movieThumbnail(movie Movie) {
-	<li class="thumbnail">
+	<li id={ fmt.Sprintf("movieThumbnail-%d", movie.id) } class="thumbnail">
 		<img class="thumbnail__img" src="/static/img/default-movie.jpg" alt="obrazek"/>
 		<div class="thumbnail__content">
 			<h2>{ movie.title }</h2>
 			<p>{ movie.release_date }</p>
 			<p>{ movie.vote_average }</p>
+			if movie.bookmarked {
+				<button
+					hx-get={ string(templ.URL(fmt.Sprintf("/unsaved/%d", movie.id)))}
+					hx-trigger="click consume" 
+					hx-target={ fmt.Sprintf("#movieThumbnail-%d", movie.id) }
+					>
+					delete from bookmark
+				</button>
+			} else {
+				<button hx-get={ string(templ.URL(fmt.Sprintf("/saved/%d", movie.id)))} hx-trigger="click consume" hx-target={ fmt.Sprintf("#movieThumbnail-%d", movie.id) } hx-swap="outerHTML">add to bookmark</button>			
+			}
 		</div>
 	</li>
+}
+
+func sendID(id int) string {
+    return fmt.Sprintf(`{'thumbnailId': '%s'}`, id) 
+}
+func sendIDGET(id int) string {
+    return fmt.Sprintf(`/saved?id='%s'}`, id) 
 }
 
 templ searchTabTemplate(movies []Movie) {
@@ -33,24 +51,6 @@ templ searchTabTemplate(movies []Movie) {
 	</div>
 }
 
-// templ headerTemplate() {
-// <header data-testid="headerTemplate">
-// 	<h1></h1>
-// 	@inputTemplate()
-// </header>
-// }
-
-// templ inputTemplate() {
-// 	<form hx-post="/search" hx-target="#main" hx-swap="innerHTML">
-// 		<input type="text" name="search" placeholder="Search"/>
-// 	</form>
-// }
-
-// templ footerTemplate() {
-// 	<footer data-testid="footerTemplate">
-// 		@navTemplate()
-// 	</footer>
-// }
 templ Home() {
 	<html>
 		<head>

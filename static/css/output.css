@@ -595,4 +595,14 @@ main {
 
 .thumbnail {
   display: flex;
+  gap: 10px;
+  height: 150px;
+}
+
+.thumbnail img {
+  max-width: 50%;
+}
+
+.thumbnail div {
+  white-space: nowrap;
 }
