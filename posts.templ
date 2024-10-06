@@ -12,8 +12,48 @@ templ favorites(movies []Movie) {
 	</div>	
 }
 
+templ movieDetails(movie Movie) {
+	<div>
+		<div>
+			FUTURE BACKDROP
+			<div>
+				<img src="" alt="movie-backdrop"/>
+				<h2>{ movie.title }</h2>
+			</div>
+		</div>
+
+		<ul>
+			<li>{ movie.release_date }</li>
+			<li>{ movie.vote_average }</li>
+			<li>{ movie.tagline }</li>
+		</ul>
+
+		<nav>
+			<ul>
+				<li><button>Overview</button></li>
+				<li><button>Reviews</button></li>
+				<li><button>Cast</button></li>
+			</ul>
+		</nav>
+
+		<div>{ movie.overview }</div>
+		<div>
+			Lorem ipsum dolor sit amet consectetur, adipisicing elit. Obcaecati alias beatae qui ab corporis, nam praesentium consectetur ipsum repellendus recusandae voluptas repellat saepe similique at deleniti quidem quos fugiat est.
+		</div>
+		<div>
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae quaerat ad soluta dolorem necessitatibus, eius, atque placeat nam rerum earum doloremque dolore in accusamus? Officia repellendus impedit atque porro eum!
+		</div>
+	</div>
+}
+
 templ movieThumbnail(movie Movie) {
-	<li hx-trigger="click" id={ fmt.Sprintf("movieThumbnail-%d", movie.id) } class="flex gap-3 h-40">
+	<li hx-trigger="click"
+		hx-swap="innerHTML"
+		hx-target="#main"
+		hx-get={ string(templ.URL(fmt.Sprintf("/movie/%d", movie.id)))}
+		id={ fmt.Sprintf("movieThumbnail-%d", movie.id) } 
+		class="flex gap-3 h-40"
+		>
 		<img class="max-w-1/2" src="/static/img/default-movie.jpg" alt="obrazek"/>
 		<div class="flex flex-col">
 			<h2>{ movie.title }</h2>
@@ -61,7 +101,7 @@ templ Home() {
 					<ul class="contents">
 						<li><a href="/">Home</a></li>
 						<li><a href="/searchTab">Search</a></li>
-						<li><a hx-get="/favorites" hx-target="#main" hx-swap="innerHTML">Favorites</a></li>
+						<li><a hx-get="/favorites" hx-target="#main" hx-swap="innerHTML" class="cursor-pointer">Favorites</a></li>
 					</ul>
 				</nav>
 			</header>

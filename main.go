@@ -215,6 +215,20 @@ func main() {
 		favorites(data).Render(r.Context(), w)
 	})
 
+	http.HandleFunc("GET /movie/{id}", func(w http.ResponseWriter, r *http.Request) {
+		movieID, err :=  strconv.Atoi(r.PathValue("id"))
+		if err != nil {
+			log.Fatal("something went wrong with integer to string conversion, status: %s", err)
+		}
+
+		movie, err := getMovieByIdFromDB(DB, movieID)
+		if err != nil {
+			log.Fatal("Something went wrong with getting the movie from db, err: %s", err)
+		}
+
+		movieDetails(movie).Render(r.Context(), w)
+	})
+
 	// Start the server.
 	fmt.Println("listening on http://localhost:8000")
 	if err := http.ListenAndServe("localhost:8000", nil); err != nil {
