@@ -4,7 +4,7 @@ import "fmt"
 
 templ favorites(movies []Movie) {
 	<div>
-		<ul class="movies-favorites" id="favoritesTemple">
+		<ul class="grid-template-column grid gap-3" id="favoritesTemple">
 			for _, movie := range movies {
 				@movieThumbnail(movie)
 			}
@@ -36,7 +36,7 @@ templ movieThumbnail(movie Movie) {
 
 templ searchTabTemplate(movies []Movie) {
 	<div>
-		<ul class="movies-thumbnails" id="searchResultTemplate">
+		<ul class="grid-template-column grid gap-3" id="searchResultTemplate">
 			for _, movie := range movies {
 				@movieThumbnail(movie)
 			}
