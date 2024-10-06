@@ -10,6 +10,7 @@ body {
 
 main {
       height: 80vh;
+      padding: 2rem;
 }
 
 .header {
@@ -34,7 +35,8 @@ main {
       margin-inline: 45px;
 }
 
-.movies-thumbnails {
+.movies-thumbnails,
+.movies-favorites {
       display: grid;
       gap: 1rem;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));

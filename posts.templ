@@ -1,17 +1,17 @@
 package main
 
 import "fmt"
-// import "time"
 
-// templ bookmarksTemplate() {
-// 	@layout() {
-// 		<div>
-// 			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde impedit, laboriosam
-// 			eum quisquam eveniet odit amet placeat iste ea perferendis sunt nostrum, voluptatum
-// 			at quam excepturi quae rerum magni nobis?
-// 		</div>
-// 	}
-// }
+templ favorites(movies []Movie) {
+	<div>
+		<ul class="movies-favorites" id="favoritesTemple">
+			for _, movie := range movies {
+				@movieThumbnail(movie)
+			}
+		</ul>movies-favorites
+	</div>	
+}
+
 templ movieThumbnail(movie Movie) {
 	<li id={ fmt.Sprintf("movieThumbnail-%d", movie.id) } class="thumbnail">
 		<img class="thumbnail__img" src="/static/img/default-movie.jpg" alt="obrazek"/>
@@ -59,7 +59,7 @@ templ Home() {
 			<link href="/static/css/output.css" rel="stylesheet"/>
 		</head>
 		<body>
-			<header class="header" data-testid="headerTemplate">
+			<header class="header">
 				<h1 class="header__title">Name of the Page</h1>
 				<form class="search" hx-post="/search" hx-target="#main" hx-swap="innerHTML">
 					<input class="search__input" type="text" name="search" placeholder="Search"/>
@@ -68,7 +68,7 @@ templ Home() {
 					<ul class="nav__list">
 						<li><a href="/">Home</a></li>
 						<li><a href="/searchTab">Search</a></li>
-						<li><a href="/bookmarksTab">Watchlist</a></li>
+						<li><a hx-get="/favorites" hx-target="#main" hx-swap="innerHTML">Favorites</a></li>
 					</ul>
 				</nav>
 			</header>
