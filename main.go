@@ -57,26 +57,25 @@ func updateBookmark(DB *sql.DB, movieID int, bookmarked bool) error {
     return nil
 }
 
-func getMovieByIdFromDB (DB *sql.DB, movieId int) (Movie, error) {
+func getMovieByIdFromDB(DB *sql.DB, movieId int) (Movie, error) {
 	 sqlQuery := `SELECT * FROM movies WHERE id = ?;`
 
 	var movie Movie
 
 	err := DB.QueryRow(sqlQuery, movieId).Scan(&movie.id, &movie.original_title, &movie.budget, &movie.popularity, &movie.release_date, &movie.revenue, &movie.title, &movie.vote_average, &movie.vote_count, &movie.overview, &movie.tagline, &movie.uid, &movie.director_id, &movie.bookmarked);
 	if err != nil {
-		fmt.Println("database cant be open", err)
+		fmt.Println("database cant be open, err: %s", err)
 		return Movie{}, err
 	}
 	return movie, nil
 }
 
-func getMoviesFromDB(DB *sql.DB, searchTitle string) ([]Movie, error) {
-	sqlQuery := `select * from movies where Title LIKE $1 LIMIT 100`
+func getMovies(DB *sql.DB, sqlQuery string, args ...interface{}) ([]Movie, error) {
 	data := []Movie{}
 	movie := Movie {}
-	rows, err := DB.Query(sqlQuery, "%" + searchTitle + "%")
+	rows, err := DB.Query(sqlQuery, args...)
 	if err != nil {
-		fmt.Println("database cant be open", err)
+		fmt.Println("(getMovies) database cant be open, err: %s", err)
 		return nil, err
 	}
 
@@ -85,7 +84,7 @@ func getMoviesFromDB(DB *sql.DB, searchTitle string) ([]Movie, error) {
 	for rows.Next() {
 		err := rows.Scan(&movie.id, &movie.original_title, &movie.budget, &movie.popularity, &movie.release_date, &movie.revenue, &movie.title, &movie.vote_average, &movie.vote_count, &movie.overview, &movie.tagline, &movie.uid, &movie.director_id, &movie.bookmarked)
 		if err != nil {
-			log.Fatal("Eror with query: ", err)
+			log.Fatal("Error with query, status: ", err)
 			return nil, err
 		}
 		
@@ -127,30 +126,6 @@ func handleBookmarkChange(DB *sql.DB, movieID int, flag bool, w http.ResponseWri
 		log.Fatal("something went wrong with getting movie from DB, err: %s", err)
 	}
 	movieThumbnail(movie).Render(r.Context(), w)
-}
-
-func getFavorites(DB *sql.DB) ([]Movie, error) {
-	sqlQuery := `select * from movies where bookmarked = 1 LIMIT 100`
-	data := []Movie{}
-	movie := Movie {}
-	rows, err := DB.Query(sqlQuery)
-	if err != nil {
-		fmt.Println("database cant be open", err)
-		return nil, err
-	}
-
-	defer rows.Close()	
-   
-	for rows.Next() {
-		err := rows.Scan(&movie.id, &movie.original_title, &movie.budget, &movie.popularity, &movie.release_date, &movie.revenue, &movie.title, &movie.vote_average, &movie.vote_count, &movie.overview, &movie.tagline, &movie.uid, &movie.director_id, &movie.bookmarked)
-		if err != nil {
-			log.Fatal("Error with query, status: ", err)
-			return nil, err
-		}
-		
-		data = append(data, movie)
-	}
-	return data, nil
 }
 
 func main() {
@@ -197,12 +172,15 @@ func main() {
 
 	http.HandleFunc("/searchTab", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("searchTab")
-		// searchTabTemplate(nil).Render(r.Context(), w)		
 	})
 
 	http.HandleFunc("/search", func(w http.ResponseWriter, r *http.Request) {
 		title := r.FormValue("search")
-		data, err := getMoviesFromDB(DB, title)
+
+		sqlQuery := `SELECT * FROM movies WHERE title LIKE ? LIMIT 100`
+		searchTitle := "%" + title + "%"
+		
+		data, err := getMovies(DB, sqlQuery, searchTitle)
 		if(err != nil) {
 			log.Fatal(err)
 		}
@@ -226,7 +204,9 @@ func main() {
 	})
 
 	http.HandleFunc("GET /favorites", func(w http.ResponseWriter, r *http.Request) {
-		data, err := getFavorites(DB)
+		sqlQuery := `select * from movies where bookmarked = ? LIMIT 100`
+		args := "1"
+		data, err := getMovies(DB, sqlQuery, args)
 		if err != nil {
 			log.Fatal("something went wrong with getting favorites, error: %s", err)
 		}
