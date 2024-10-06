@@ -136,6 +136,17 @@ func columnExist(DB *sql.DB, tableName string, columnName string)(bool, error) {
 	return false, nil
 }
 
+func handleBookmarkChange(DB *sql.DB, movieID int, flag bool, w http.ResponseWriter, r *http.Request) {
+	updateBookmark(DB, movieID, flag)
+	movie, err := getMovieByIdFromDB(DB, movieID)
+	if err != nil {
+		log.Fatal("something went wrong with getting movie from DB, err: %s", err)
+	}
+
+	fmt.Println(movie)
+	movieThumbnail(movie).Render(r.Context(), w)
+}
+
 func main() {
 	DB, err:= sql.Open("sqlite3", "data/movie.sqlite")
 	if err != nil {
@@ -199,20 +210,7 @@ func main() {
 		if err != nil {
 			log.Fatal("something went wrong with integer to string conversion, status: %s", err)
 		}
-
-		movieBefore, err := getMovieByIdFromDB(DB, movieID)
-		if err != nil {
-			log.Fatal("something went wrong with getting movie from DB, err: %s", err)
-		}
-		fmt.Println("movie before changes", movieBefore)
-		updateBookmark(DB, movieID, true)
-		movie, err := getMovieByIdFromDB(DB, movieID)
-		if err != nil {
-			log.Fatal("something went wrong with getting movie from DB, err: %s", err)
-		}
-
-		fmt.Println(movie)
-		movieThumbnail(movie).Render(r.Context(), w)
+		handleBookmarkChange(DB, movieID, true, w, r)
 	})
 
 	http.HandleFunc("GET /unsaved/{id}", func(w http.ResponseWriter, r *http.Request) {
@@ -221,20 +219,7 @@ func main() {
 		if err != nil {
 			log.Fatal("something went wrong with integer to string conversion, status: %s", err)
 		}
-
-		movieBefore, err := getMovieByIdFromDB(DB, movieID)
-		if err != nil {
-			log.Fatal("something went wrong with getting movie from DB, err: %s", err)
-		}
-		fmt.Println("movie before changes", movieBefore)
-		updateBookmark(DB, movieID, false)
-		movie, err := getMovieByIdFromDB(DB, movieID)
-		if err != nil {
-			log.Fatal("something went wrong with getting movie from DB, err: %s", err)
-		}
-
-		fmt.Println(movie)
-		movieThumbnail(movie).Render(r.Context(), w)
+		handleBookmarkChange(DB, movieID, false, w, r)
 	})
 
 	// Start the server.
