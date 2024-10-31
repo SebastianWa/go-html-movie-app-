@@ -1,7 +1,5 @@
 package main
-
 import "fmt"
-
 templ favorites(movies []Movie) {
 	<div>
 		<ul class="grid-template-column grid gap-3" id="favoritesTemple">
@@ -13,9 +11,10 @@ templ favorites(movies []Movie) {
 }
 
 templ movieDetails(movie Movie) {
-	<div>
+	<div class="max-w-screen-md">
 		<div>
 			FUTURE BACKDROP
+			<span></span>
 			<div>
 				<img src="" alt="movie-backdrop"/>
 				<h2>{ movie.title }</h2>

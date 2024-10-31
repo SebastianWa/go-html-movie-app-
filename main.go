@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -26,6 +27,12 @@ type Movie struct {
 	uid int
 	director_id int
 	bookmarked bool
+
+	// backdrop_path string
+	// poster_path string
+	// genres []string
+	// runtime string
+
 }
 
 // func searchMovieInDb(DB *sql.DB) {
@@ -81,6 +88,11 @@ func getMovies(DB *sql.DB, sqlQuery string, args ...interface{}) ([]Movie, error
 
 	defer rows.Close()	
    
+	if !rows.Next() {
+		fmt.Println("No results")
+		return nil, errors.New("No results")
+	}
+
 	for rows.Next() {
 		err := rows.Scan(&movie.id, &movie.original_title, &movie.budget, &movie.popularity, &movie.release_date, &movie.revenue, &movie.title, &movie.vote_average, &movie.vote_count, &movie.overview, &movie.tagline, &movie.uid, &movie.director_id, &movie.bookmarked)
 		if err != nil {
